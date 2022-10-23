@@ -47,12 +47,14 @@ class AppNavigationBloc extends Bloc<AppNavigationEvent, AppNavigationState> {
   void _setSignin(
       AppNavigationSetSignin event, Emitter<AppNavigationState> emit) {
     _authBloc.add(const AuthEvent.setNotAuthorized());
-    emit(state.copyWith(startRoute: const AppNavigationStartRoute.signin()));
+    emit(state.copyWith(
+        startRoute: const AppNavigationStartRoute.signin(), routes: []));
   }
 
   void _setMain(AppNavigationSetMain event, Emitter<AppNavigationState> emit) {
     emit(state.copyWith(
-        startRoute: AppNavigationStartRoute.main(authState: authState)));
+        startRoute: AppNavigationStartRoute.main(authState: authState),
+        routes: []));
   }
 
   void _addBasket(
