@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_declarative_navigation_example/app/router/app_router_bloc/app_router_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/screen/book_list/widget/book_tile.dart';
 import 'package:flutter_declarative_navigation_example/core/data/model/book.dart';
+import 'package:provider/provider.dart';
 
 class BookListScreen extends StatefulWidget {
-  final Function(Book book) onTapped;
-
-  const BookListScreen({Key? key, required this.onTapped}) : super(key: key);
+  const BookListScreen({Key? key}) : super(key: key);
 
   @override
   State<BookListScreen> createState() => _BookListScreenState();
@@ -33,7 +33,9 @@ class _BookListScreenState extends State<BookListScreen> {
           itemBuilder: (context, index) {
             return BookTile(
               book: books[index],
-              onTap: () => widget.onTapped(books[index]),
+              onTap: () => context
+                  .read<AppRouterBloc>()
+                  .add(AppRouterEvent.addBookDetails(book: books[index])),
             );
           },
           itemCount: books.length,

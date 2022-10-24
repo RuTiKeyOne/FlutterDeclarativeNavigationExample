@@ -14,7 +14,7 @@ class AppRouterInformationParser extends RouteInformationParser<RoutePath> {
       if (uri.pathSegments[0] != AppRouter.bookDetailsRoute) {
         return const RoutePath.error();
       }
-      final remaining = uri.pathSegments[1];
+      final remaining = uri.pathSegments[2];
       final book = remaining is Book ? remaining as Book : null;
       if (book == null) return const RoutePath.error();
       return RoutePath.bookDetails(book: book);
@@ -26,14 +26,14 @@ class AppRouterInformationParser extends RouteInformationParser<RoutePath> {
   RouteInformation? restoreRouteInformation(RoutePath configuration) {
     return configuration.when(
       error: () {
-        return const RouteInformation(location: AppRouter.errorRoute);
+        return const RouteInformation(location: '/${AppRouter.errorRoute}');
       },
       bookList: () {
         return const RouteInformation(location: AppRouter.initialRoute);
       },
       bookDetails: (book) {
         return RouteInformation(
-            location: '${AppRouter.bookDetailsRoute}/$book');
+            location: '/${AppRouter.bookDetailsRoute}/$book');
       },
     );
   }

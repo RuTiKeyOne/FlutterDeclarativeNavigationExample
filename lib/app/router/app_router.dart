@@ -3,8 +3,8 @@ import 'package:flutter_declarative_navigation_example/app/router/router_delegat
 
 class AppRouter {
   static const initialRoute = '/';
-  static const errorRoute = '/404';
-  static const bookDetailsRoute = 'books/';
+  static const errorRoute = '404';
+  static const bookDetailsRoute = 'bookDetails';
 
   static final routerDelegate = AppRouterDelegate();
   static final routerInformationParser = AppRouterInformationParser();
