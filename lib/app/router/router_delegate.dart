@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/router/app_router_bloc/app_router_bloc.dart';
@@ -11,32 +13,28 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   late final GlobalKey<NavigatorState> _navigatorKey;
   final AppRouterBloc appRouterBloc;
+  late RoutePath? _currentConfiguration;
+
+  late final StreamSubscription<AppRouterState> _appRouterBlocSubscription;
 
   AppRouterDelegate()
       : appRouterBloc = AppRouterBloc(),
-        _navigatorKey = GlobalKey<NavigatorState>();
+        _navigatorKey = GlobalKey<NavigatorState>() {
+    _appRouterBlocSubscription =
+        appRouterBloc.stream.listen(_listenAppRouterBloc);
+    _currentConfiguration = getCurrentConfiguration(appRouterBloc.state);
+  }
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
   @override
-  RoutePath? get currentConfiguration {
-    if (appRouterBloc.state.startRoute is AppRouterStartError) {
-      return const RoutePath.error();
-    } else if (appRouterBloc.state.startRoute is AppRouterStartBookList) {
-      if (appRouterBloc.state.routes.isEmpty) {
-        return const RoutePath.bookList();
-      } else {
-        final lastRoute = appRouterBloc.state.routes.last;
-        return lastRoute.when(
-          bookDetails: (book) {
-            return RoutePath.bookDetails(book: book);
-          },
-        );
-      }
-    }
+  RoutePath? get currentConfiguration => _currentConfiguration;
 
-    return const RoutePath.error();
+  void _listenAppRouterBloc(AppRouterState state) {
+    final configuration = getCurrentConfiguration(state);
+    _currentConfiguration = configuration;
+    notifyListeners();
   }
 
   List<Page<dynamic>> pages(AppRouterState state) {
@@ -130,5 +128,30 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
     );
 
     return;
+  }
+
+  RoutePath? getCurrentConfiguration(AppRouterState state) {
+    if (state.startRoute is AppRouterStartError) {
+      return const RoutePath.error();
+    } else if (state.startRoute is AppRouterStartBookList) {
+      if (state.routes.isEmpty) {
+        return const RoutePath.bookList();
+      } else {
+        final lastRoute = appRouterBloc.state.routes.last;
+        return lastRoute.when(
+          bookDetails: (book) {
+            return RoutePath.bookDetails(book: book);
+          },
+        );
+      }
+    }
+
+    return const RoutePath.error();
+  }
+
+  @override
+  void dispose() {
+    _appRouterBlocSubscription.cancel();
+    super.dispose();
   }
 }
