@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_declarative_navigation_example/app/router/app_router.dart';
 import 'package:flutter_declarative_navigation_example/app/router/config/route_path.dart';
@@ -14,10 +16,13 @@ class AppRouterInformationParser extends RouteInformationParser<RoutePath> {
       if (uri.pathSegments[0] != AppRouter.bookDetailsRoute) {
         return const RoutePath.error();
       }
-      final remaining = uri.pathSegments[2];
-      final book = remaining is Book ? remaining as Book : null;
-      if (book == null) return const RoutePath.error();
-      return RoutePath.bookDetails(book: book);
+      final remaining = uri.pathSegments[1];
+      try {
+        final book = Book.fromJson(jsonDecode(remaining));
+        return RoutePath.bookDetails(book: book);
+      } catch (_) {
+        return const RoutePath.error();
+      }
     }
     return const RoutePath.error();
   }
@@ -32,8 +37,9 @@ class AppRouterInformationParser extends RouteInformationParser<RoutePath> {
         return const RouteInformation(location: AppRouter.initialRoute);
       },
       bookDetails: (book) {
+        final jsonBook = jsonEncode(book.toJson());
         return RouteInformation(
-            location: '/${AppRouter.bookDetailsRoute}/$book');
+            location: '/${AppRouter.bookDetailsRoute}/$jsonBook');
       },
     );
   }

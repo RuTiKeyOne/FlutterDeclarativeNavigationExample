@@ -14,12 +14,17 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Book _$BookFromJson(Map<String, dynamic> json) {
+  return _Book.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Book {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   int get countPages => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BookCopyWith<Book> get copyWith => throw _privateConstructorUsedError;
 }
@@ -106,10 +111,12 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Book implements _Book {
   const _$_Book(
       {required this.id, required this.title, required this.countPages});
+
+  factory _$_Book.fromJson(Map<String, dynamic> json) => _$$_BookFromJson(json);
 
   @override
   final int id;
@@ -134,6 +141,7 @@ class _$_Book implements _Book {
                 other.countPages == countPages));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, countPages);
 
@@ -142,6 +150,13 @@ class _$_Book implements _Book {
   @pragma('vm:prefer-inline')
   _$$_BookCopyWith<_$_Book> get copyWith =>
       __$$_BookCopyWithImpl<_$_Book>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_BookToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Book implements Book {
@@ -149,6 +164,8 @@ abstract class _Book implements Book {
       {required final int id,
       required final String title,
       required final int countPages}) = _$_Book;
+
+  factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
   @override
   int get id;
