@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_declarative_navigation_example/app/screen/book_list/book_list_screen.dart';
-import 'package:flutter_declarative_navigation_example/app/screen/settings/settings_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_declarative_navigation_example/app/router/main_router/router_delegate.dart';
+import 'package:flutter_declarative_navigation_example/app/router/main_router/router_information_parser.dart';
+import 'package:flutter_declarative_navigation_example/app/router/main_router_bloc/main_router_bloc.dart';
 import 'package:flutter_declarative_navigation_example/generated/l10n.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,52 +12,43 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
+class _MainScreenState extends State<MainScreen> {
+  late final MainRouterDelegate mainRouterDelegate;
+  late final MainRouterInformationParser mainRouterInformationParser;
 
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this)
-      ..addListener(() {
-        setState(() {});
-      });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
-  void changeTabIndex(int newIndex) {
-    tabController.animateTo(newIndex);
+    mainRouterDelegate =
+        MainRouterDelegate(mainRouterBloc: context.read<MainRouterBloc>());
+    mainRouterInformationParser = MainRouterInformationParser();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: tabController,
-          children: const [
-            BookListScreen(),
-            SettingsScreen(),
-          ],
+        body: Router(
+          routerDelegate: mainRouterDelegate,
+          routeInformationParser: mainRouterInformationParser,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: changeTabIndex,
-          currentIndex: tabController.index,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
-          items: [
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.book), label: S.of(context).books),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.settings), label: S.of(context).settings)
-          ],
+        bottomNavigationBar: BlocBuilder<MainRouterBloc, MainRouterState>(
+          builder: (context, state) {
+            return BottomNavigationBar(
+              onTap: (index) => context.read<MainRouterBloc>().add(
+                  MainRouterEvent.changeSelectedIndex(selectedIndex: index)),
+              currentIndex: state.selectedIndex,
+              selectedItemColor: Colors.blue,
+              unselectedItemColor: Colors.grey,
+              items: [
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.book), label: S.of(context).books),
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.settings),
+                    label: S.of(context).settings)
+              ],
+            );
+          },
         ),
       ),
     );

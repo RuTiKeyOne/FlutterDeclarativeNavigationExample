@@ -2136,25 +2136,25 @@ class _$AppRouterRouteCopyWithImpl<$Res, $Val extends AppRouterRoute>
 }
 
 /// @nodoc
-abstract class _$$AppRouterRouteBacketCopyWith<$Res> {
-  factory _$$AppRouterRouteBacketCopyWith(_$AppRouterRouteBacket value,
-          $Res Function(_$AppRouterRouteBacket) then) =
-      __$$AppRouterRouteBacketCopyWithImpl<$Res>;
+abstract class _$$AppRouterRouteBasketCopyWith<$Res> {
+  factory _$$AppRouterRouteBasketCopyWith(_$AppRouterRouteBasket value,
+          $Res Function(_$AppRouterRouteBasket) then) =
+      __$$AppRouterRouteBasketCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AppRouterRouteBacketCopyWithImpl<$Res>
-    extends _$AppRouterRouteCopyWithImpl<$Res, _$AppRouterRouteBacket>
-    implements _$$AppRouterRouteBacketCopyWith<$Res> {
-  __$$AppRouterRouteBacketCopyWithImpl(_$AppRouterRouteBacket _value,
-      $Res Function(_$AppRouterRouteBacket) _then)
+class __$$AppRouterRouteBasketCopyWithImpl<$Res>
+    extends _$AppRouterRouteCopyWithImpl<$Res, _$AppRouterRouteBasket>
+    implements _$$AppRouterRouteBasketCopyWith<$Res> {
+  __$$AppRouterRouteBasketCopyWithImpl(_$AppRouterRouteBasket _value,
+      $Res Function(_$AppRouterRouteBasket) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AppRouterRouteBacket implements AppRouterRouteBasket {
-  const _$AppRouterRouteBacket();
+class _$AppRouterRouteBasket implements AppRouterRouteBasket {
+  const _$AppRouterRouteBasket();
 
   @override
   String toString() {
@@ -2164,7 +2164,7 @@ class _$AppRouterRouteBacket implements AppRouterRouteBasket {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AppRouterRouteBacket);
+        (other.runtimeType == runtimeType && other is _$AppRouterRouteBasket);
   }
 
   @override
@@ -2228,7 +2228,7 @@ class _$AppRouterRouteBacket implements AppRouterRouteBasket {
 }
 
 abstract class AppRouterRouteBasket implements AppRouterRoute {
-  const factory AppRouterRouteBasket() = _$AppRouterRouteBacket;
+  const factory AppRouterRouteBasket() = _$AppRouterRouteBasket;
 }
 
 /// @nodoc

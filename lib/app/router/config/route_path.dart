@@ -9,4 +9,5 @@ class RoutePath with _$RoutePath {
   const factory RoutePath.main() = RouteMainPath;
   const factory RoutePath.splash() = RouteSplashPath;
   const factory RoutePath.basket() = RouteBasketPath;
+  
 }

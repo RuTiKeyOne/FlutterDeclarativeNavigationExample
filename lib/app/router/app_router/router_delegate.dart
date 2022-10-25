@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/BLoC/auth/auth_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/router/app_router_bloc/app_router_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/router/config/route_path.dart';
+import 'package:flutter_declarative_navigation_example/app/router/main_router_bloc/main_router_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/screen/basket/basket_screen.dart';
 import 'package:flutter_declarative_navigation_example/app/screen/error/error_screen.dart';
 import 'package:flutter_declarative_navigation_example/app/screen/main/main_screen.dart';
@@ -77,8 +78,15 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
       pages.add(
         MaterialPage(
           key: const ValueKey(WidgetKey.mainScreenKey),
-          child: BlocProvider.value(
-            value: _appRouterBloc,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: _appRouterBloc,
+              ),
+              BlocProvider<MainRouterBloc>(
+                create: (context) => MainRouterBloc(),
+              ),
+            ],
             child: const MainScreen(),
           ),
         ),
