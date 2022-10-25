@@ -12,17 +12,17 @@ import 'package:flutter_declarative_navigation_example/core/value/widget_key.dar
 class AppRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   late final GlobalKey<NavigatorState> _navigatorKey;
-  final AppRouterBloc appRouterBloc;
+  final AppRouterBloc _appRouterBloc;
   late RoutePath? _currentConfiguration;
 
   late final StreamSubscription<AppRouterState> _appRouterBlocSubscription;
 
   AppRouterDelegate()
-      : appRouterBloc = AppRouterBloc(),
+      : _appRouterBloc = AppRouterBloc(),
         _navigatorKey = GlobalKey<NavigatorState>() {
     _appRouterBlocSubscription =
-        appRouterBloc.stream.listen(_listenAppRouterBloc);
-    _currentConfiguration = getCurrentConfiguration(appRouterBloc.state);
+        _appRouterBloc.stream.listen(_listenAppRouterBloc);
+    _currentConfiguration = getCurrentConfiguration(_appRouterBloc.state);
   }
 
   @override
@@ -55,7 +55,7 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
         MaterialPage(
           key: const ValueKey(WidgetKey.bookListScreenKey),
           child: BlocProvider.value(
-            value: appRouterBloc,
+            value: _appRouterBloc,
             child: const BookListScreen(),
           ),
         ),
@@ -69,7 +69,7 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
           MaterialPage(
             key: const ValueKey(WidgetKey.bookDetailsScreenKey),
             child: BlocProvider.value(
-              value: appRouterBloc,
+              value: _appRouterBloc,
               child: BookDetailsScreen(book: route.book),
             ),
           ),
@@ -82,20 +82,20 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppRouterBloc, AppRouterState>(
-      bloc: appRouterBloc,
+      bloc: _appRouterBloc,
       builder: (context, state) {
         return Navigator(
           key: navigatorKey,
           pages: pages(state),
           onPopPage: (route, result) {
-            final routes = appRouterBloc.state.routes.last;
+            final routes = _appRouterBloc.state.routes.last;
             if (!route.didPop(result)) {
               return false;
             }
 
             routes.when(
               bookDetails: (book) {
-                appRouterBloc.add(const AppRouterEvent.popBookDetails());
+                _appRouterBloc.add(const AppRouterEvent.popBookDetails());
               },
             );
 
@@ -110,19 +110,19 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
   Future<void> setNewRoutePath(RoutePath configuration) async {
     configuration.when(
       error: () {
-        appRouterBloc.add(const AppRouterEvent.setErrorFirstRoute());
+        _appRouterBloc.add(const AppRouterEvent.setErrorFirstRoute());
         return;
       },
       bookList: () {
-        appRouterBloc.add(const AppRouterEvent.setBookListFirstRoute());
+        _appRouterBloc.add(const AppRouterEvent.setBookListFirstRoute());
         return;
       },
       bookDetails: (book) {
         if (book.id < 0) {
-          appRouterBloc.add(const AppRouterEvent.setErrorFirstRoute());
+          _appRouterBloc.add(const AppRouterEvent.setErrorFirstRoute());
           return;
         }
-        appRouterBloc.add(AppRouterEvent.addBookDetails(book: book));
+        _appRouterBloc.add(AppRouterEvent.addBookDetails(book: book));
         return;
       },
     );
@@ -137,7 +137,7 @@ class AppRouterDelegate extends RouterDelegate<RoutePath>
       if (state.routes.isEmpty) {
         return const RoutePath.bookList();
       } else {
-        final lastRoute = appRouterBloc.state.routes.last;
+        final lastRoute = _appRouterBloc.state.routes.last;
         return lastRoute.when(
           bookDetails: (book) {
             return RoutePath.bookDetails(book: book);
