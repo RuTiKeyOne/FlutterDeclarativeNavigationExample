@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_declarative_navigation_example/app/routes/navigation/settings_navigation.dart';
 import 'package:flutter_declarative_navigation_example/app/screen/book_list/book_list_screen.dart';
+import 'package:flutter_declarative_navigation_example/app/screen/settings/settings_screen.dart';
 import 'package:flutter_declarative_navigation_example/generated/l10n.dart';
 
 class MainScreen extends StatefulWidget {
@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen>
           controller: tabController,
           children: const [
             BookListScreen(),
-            SettingsNavigation(),
+            SettingsScreen(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

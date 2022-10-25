@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_declarative_navigation_example/app/BLoC/auth/auth_bloc.dart';
-import 'package:flutter_declarative_navigation_example/app/routes/bloc/app_navigation/app_navigation_bloc.dart';
+import 'package:flutter_declarative_navigation_example/app/router/app_router_bloc/app_router_bloc.dart';
 import 'package:flutter_declarative_navigation_example/core/di/service_locator/locator.dart';
 
 class BookListScreen extends StatelessWidget {
@@ -14,8 +14,8 @@ class BookListScreen extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () => context
-                  .read<AppNavigationBloc>()
-                  .add(const AppNavigationEvent.addBasket()),
+                  .read<AppRouterBloc>()
+                  .add(const AppRouterEvent.addBasket()),
               icon: const Icon(Icons.shopping_bag_outlined)),
           actions: [
             IconButton(

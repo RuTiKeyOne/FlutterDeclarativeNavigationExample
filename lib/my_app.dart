@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_declarative_navigation_example/app/routes/navigation/app_navigation.dart';
+import 'package:flutter_declarative_navigation_example/app/router/app_router/app_router.dart';
 import 'package:flutter_declarative_navigation_example/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       theme: ThemeData(),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      home: const AppNavigation(),
+      routerDelegate: AppRouter.routerDelegate,
+      routeInformationParser: AppRouter.routerInformationParser,
     );
   }
 }
